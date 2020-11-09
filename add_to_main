@@ -1,0 +1,116 @@
+import transport
+import patterns
+
+def OnSysEx(event):
+    print(event)
+    print('sysex')
+
+
+def OnNoteOn(event):
+    print(event)
+    print('note-on')
+
+
+def OnControlChange(event):
+    print(event)
+    print('control change (cc)')
+
+
+def OnProgramChange(event):
+    print(event)
+    print('program change')
+
+#tap_tempo open
+transport.globalTransport(midi.FPT_TapTempo)
+
+#metronome_toggle
+transport.globalTransport(midi.FPT_Metronome)
+
+#nxt/prev pattern
+patterns.jumpToPattern(int(patterns.patternNumber+1)
+patterns.jumpToPattern(int(patterns.patternNumber-1)
+
+#new pattern
+patterns.jumpToPattern(int(patterns.patternCount+1)
+patterns.findFirstNextEmptyPat()
+
+#play/pause
+transport.start()
+transport.globalTransport(midi.FPT_Play)
+#stop
+transport.stop()
+transport.globalTransport(midi.FPT_Stop)
+#record toggle
+transport.record()
+transport.globalTransport(midi.FPT_Record)
+
+#pat/song
+if int(transport.getLoopMode()) == 0:
+    transport.setLoopMode(1)
+else:
+    transport.setLoopMode(0)
+
+#record from begginning at current patt
+transport.setSongPos(0)
+if transport.isRecording():
+    pass
+else:
+    transport.record()
+transport(midi.FPT_CountDown())
+transport.start()
+
+#record from begginning at new pattern
+patterns.jumpToPattern(int(patterns.patternCount+1)
+transport.setSongPos(0)
+if ui.isMetronomeEnabled():
+    transport.globalTransport(midi.FPT_Metronome)
+else:
+    pass
+if ui.isPrecountEnabled():
+    pass
+else:
+    transport.globalTransport(midi.FPT_CountDown)
+if transport.isRecording():
+    pass
+else:
+    transport.record()
+transport.start()
+
+#drumbus mute
+mixer.muteTrack()
+#bassbus mute
+mixer.muteTrack()
+#otherbus mute
+mixer.muteTrack()
+#instrbus mute
+mixer.muteTrack()
+
+#zoom1
+ui.horZoom()
+#zoom2
+ui.verZoom()
+#snaping to grid
+ui.snapOnOff()
+#delete
+ui.delete()
+#enter
+ui.enter()
+#escape
+ui.escape()
+
+#edison?
+ui.showWindow(mixer.getTrackPluginId(1,1))
+
+if mixer.isTrackSelected(1):
+    transport.globalTransport(midi.FPT_NextMixerWindow)
+else:
+    mixer.selectTrack(1)
+    transport.globalTransport(midi.FPT_NextMixerWindow)
+
+#close all windows
+transport(midi.FPT_F12)
+
+#save
+transport(midi.FPT_Save)
+
+
